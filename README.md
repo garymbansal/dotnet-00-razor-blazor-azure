@@ -59,8 +59,31 @@ Provides functionality to **`Serialize` objects or values to JSON** (JavaScript 
 Specifies the property name that is present in the JSON when serializing and deserializing.
 `**[JsonPropertyName("img")]**`
 
-
-
+### Reading & Deserializing JSON File data
+```
+using (var jsonFileReader = File.OpenText(JsonFileName))
+{
+    return JsonSerializer.Deserialize<Product[]>(jsonFileReader.ReadToEnd(),
+    new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true
+    });
+}
+```
+### Writing & Serializing JSON File data
+```
+using (var outputStream = File.OpenWrite(JsonFileName))
+{
+    JsonSerializer.Serialize<IEnumerable<Product>>(
+        new Utf8JsonWriter(outputStream, new JsonWriterOptions
+        {
+            SkipValidation = true,
+            Indented = true
+        }),
+        products
+    );
+}
+```
 
 
 
